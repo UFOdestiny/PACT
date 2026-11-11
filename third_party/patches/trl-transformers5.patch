@@ -1,0 +1,32 @@
+diff --git a/trl/import_utils.py b/trl/import_utils.py
+index 36657fde..4b3f809f 100644
+--- a/trl/import_utils.py
++++ b/trl/import_utils.py
+@@ -21,14 +21,20 @@ from typing import Any
+ from transformers.utils.import_utils import _is_package_available
+ 
+ 
++def _available(name: str) -> bool:
++    """Bridge Transformers 4.x bool and 5.x (bool, version) return APIs."""
++    result = _is_package_available(name)
++    return bool(result[0]) if isinstance(result, tuple) else bool(result)
++
++
+ # Use same as transformers.utils.import_utils
+-_deepspeed_available = _is_package_available("deepspeed")
+-_diffusers_available = _is_package_available("diffusers")
+-_llm_blender_available = _is_package_available("llm_blender")
+-_mergekit_available = _is_package_available("mergekit")
+-_rich_available = _is_package_available("rich")
+-_unsloth_available = _is_package_available("unsloth")
+-_vllm_available = _is_package_available("vllm")
++_deepspeed_available = _available("deepspeed")
++_diffusers_available = _available("diffusers")
++_llm_blender_available = _available("llm_blender")
++_mergekit_available = _available("mergekit")
++_rich_available = _available("rich")
++_unsloth_available = _available("unsloth")
++_vllm_available = _available("vllm")
+ 
+ 
+ def is_deepspeed_available() -> bool:

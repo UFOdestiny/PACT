@@ -1,0 +1,50 @@
+# Training settings shared by every run; each run's overrides are in configs/<model>/<method>.yaml.
+# rollouts_per_update is independent of the GPU count: training/run.py derives the generation batch and accumulation,
+# rejecting non-divisible configurations.  Every run trains on the same frozen 8,000-question pool, ordered by seed.
+model_revision: main
+torch_dtype: bfloat16
+attn_implementation: flash_attention_2
+dataset_name: parquet
+data_train_file: resource/datasets/train/prompts-seed-41.parquet   # overridden per seed by training_prompt_manifests
+dataset_train_split: train
+dataset_test_split: test
+bf16: true
+beta: 0.001                   # anchor to the reference policy
+epsilon: 0.2
+epsilon_high: 0.2
+loss_type: bnpo
+eval_strategy: 'no'
+rollouts_per_update: 1024     # 64 prompts x G=16; generation_batch_size and
+                              # gradient_accumulation_steps follow the world size
+gradient_checkpointing: true
+max_grad_norm: 1.0            # already in force as the transformers default; recorded
+ddp_timeout: 7200             # long vLLM generations and evaluation stages outrun the 1,800 s default
+gradient_checkpointing_kwargs:
+  use_reentrant: false
+learning_rate: 1.0e-06        # shared constant learning rate
+logging_steps: 1
+lr_scheduler_type: constant
+# Exclude truncated completions from policy loss; they can still affect group
+# reward statistics. This mask is not an explicit length penalty.
+mask_truncated_completions: true
+max_prompt_length: 1536   # longest rendered training prompt is ~1,090 tokens (RLCR system prompt); no prompt is cut
+max_completion_length: 4096
+num_generations: 16
+num_iterations: 1
+num_train_epochs: 1.0
+per_device_eval_batch_size: 8
+push_to_hub: false
+report_to: none
+save_strategy: steps
+save_steps: 125
+save_total_limit: 1
+scale_rewards: false
+shuffle_dataset: false
+temperature: 0.7
+use_vllm: true
+vllm_mode: colocate
+vllm_gpu_memory_utilization: 0.4
+vllm_tensor_parallel_size: 1
+warmup_steps: 0
+max_steps: 125
+save_only_model: false

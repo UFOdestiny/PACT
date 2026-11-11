@@ -1,0 +1,30 @@
+# Python caches
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+*.egg-info/
+
+# Local paths and secrets
+.env
+
+# Models, datasets, run outputs and fetched dependencies
+artifacts/
+resource/
+third_party/trl/
+
+# Not part of the release: host-method implementations and configs, analysis, paper figures, manuscript, notes
+baseline/
+analysis/
+visualization/
+latex/
+docs/
+tests/
+ccfa-workfiles/
+
+# Editor and agent state, local links
+.vscode/
+.claude/
+.agents/
+*.ses

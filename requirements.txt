@@ -1,0 +1,17 @@
+# Python 3.11.  Training also needs the pinned TRL checkout (python -m tools.setup_trl) and third_party/rlcr.
+torch==2.10.0
+transformers==5.7.0
+accelerate==1.13.0
+huggingface_hub==1.29.0
+vllm==0.19.1
+deepspeed==0.18.9
+flash-attn==2.8.3
+datasets==5.0.0
+numpy==2.2.6
+sympy==1.14.0
+pyyaml==6.0.3
+pyarrow==23.0.1
+math-verify==0.9.0
+scikit-learn==1.8.0
+pandas==3.0.1
+matplotlib==3.10.8

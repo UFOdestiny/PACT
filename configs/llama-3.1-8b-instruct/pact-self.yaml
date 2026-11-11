@@ -1,0 +1,50 @@
+# Llama-3.1-8B-Instruct / pact-self
+# PACT-Self: strata from the group pass rate, which includes the response's own outcome.
+# Shared training settings: configs/training.yaml.
+backbone: llama-3.1-8b-instruct
+method: pact-self
+seeds:
+- 41
+model: resource/models/Llama-3.1-8B-Instruct
+training_config: configs/training.yaml
+training_prompt_manifests:
+  '41': resource/datasets/train/prompts-seed-41.parquet
+  '42': resource/datasets/train/prompts-seed-42.parquet
+  '43': resource/datasets/train/prompts-seed-43.parquet
+training:
+  save_only_model: true
+  vllm_gpu_memory_utilization: 0.35
+  per_device_train_batch_size: 8
+method_options:
+  scale_match: true
+  exact_confidence: true
+  exact_grid: percent
+  exact_temperature: 1.0
+  calibration_weight: 1.0
+  exact_weight: 8.0
+  exact_full_gradient: true
+  exact_normalize: tokens
+  lambda_agree: 0.0
+  strata_calibration: 1.0
+  strata_bins: 5
+  strata_warmup_steps: 25
+  strata_center: true
+  strata_peer_pass: true
+  strata_peer_pass_self: true
+  kl_log_ratio_clip: 5.0
+  ema_decay: 0.9   # not read by the code; part of the run's recorded configuration
+evaluation:
+  samples: 16
+  max_tokens: 4096
+  temperature: 0.7
+  top_p: 1.0
+  seed_offset: 82000
+  datasets:   # the paper suite: ID mathematics, then OOD (evaluation/suite.py)
+    pool_heldout: 2000
+    gsm8k: 1319
+    minerva_math: 272
+    aime2024: 30
+    amc2024: 34
+    arc_challenge: 1000
+    simpleqa: 500
+    mbpp_plus_fenced: 374
